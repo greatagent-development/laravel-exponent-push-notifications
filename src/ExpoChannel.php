@@ -45,8 +45,7 @@ class ExpoChannel
      */
     public function send($notifiable, Notification $notification)
     {
-        $interest = $notifiable->routeNotificationFor('ExpoPushNotifications')
-            ?: $this->interestName($notifiable);
+        $interest = $this->interestName($notifiable);
 
         $interests = [$interest];
 
@@ -71,6 +70,12 @@ class ExpoChannel
      * @return string
      */
     public function interestName($notifiable)
+    {
+        return $notifiable->routeNotificationFor('ExpoPushNotifications')
+            ?: $this->interestNameDefault($notifiable);
+    }
+
+    protected function interestNameDefault($notifiable)
     {
         $class = str_replace('\\', '.', get_class($notifiable));
 
